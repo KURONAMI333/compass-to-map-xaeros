@@ -1,0 +1,8 @@
+{
+  "message.compasstomapxaeros.structure_found": "在 %2$s 發現了結構 %1$s",
+  "message.compasstomapxaeros.biome_found": "在 %2$s 發現了生物群系 %1$s",
+  "compasstomapxaeros.configuration.title": "Compass to Map",
+  "compasstomapxaeros.configuration.feature": "功能",
+  "compasstomapxaeros.configuration.notification": "通知",
+  "compasstomapxaeros.configuration.appearance": "外觀"
+}

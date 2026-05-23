@@ -1,0 +1,8 @@
+{
+  "message.compasstomapxaeros.structure_found": "%s yapısı %s konumunda keşfedildi",
+  "message.compasstomapxaeros.biome_found": "%s biyomu %s konumunda keşfedildi",
+  "compasstomapxaeros.configuration.title": "Compass to Map",
+  "compasstomapxaeros.configuration.feature": "Özellikler",
+  "compasstomapxaeros.configuration.notification": "Bildirimler",
+  "compasstomapxaeros.configuration.appearance": "Görünüm"
+}

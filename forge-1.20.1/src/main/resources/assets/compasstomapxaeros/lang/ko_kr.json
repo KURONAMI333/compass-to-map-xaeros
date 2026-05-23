@@ -1,0 +1,8 @@
+{
+  "message.compasstomapxaeros.structure_found": "%s 구조물을 %s에서 발견했습니다",
+  "message.compasstomapxaeros.biome_found": "%s 바이옴을 %s에서 발견했습니다",
+  "compasstomapxaeros.configuration.title": "Compass to Map",
+  "compasstomapxaeros.configuration.feature": "기능",
+  "compasstomapxaeros.configuration.notification": "알림",
+  "compasstomapxaeros.configuration.appearance": "외관"
+}

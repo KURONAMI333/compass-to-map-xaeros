@@ -1,0 +1,155 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'net.neoforged.moddev' version '2.0.141'
+    id 'idea'
+}
+
+tasks.named('wrapper', Wrapper).configure {
+    distributionType = Wrapper.DistributionType.BIN
+}
+
+version = mod_version
+group = mod_group_id
+
+sourceSets.main.resources {
+    srcDir('src/generated/resources')
+    exclude("**/*.bbmodel")
+    exclude("src/generated/**/.cache")
+}
+
+repositories {
+    // Modrinth maven (ExplorersCompass / Nature's Compass)
+    maven {
+        name = "Modrinth"
+        url = "https://api.modrinth.com/maven"
+        content { includeGroup "maven.modrinth" }
+    }
+}
+
+base {
+    archivesName = mod_id
+}
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+
+neoForge {
+    version = project.neo_version
+
+    parchment {
+        mappingsVersion = project.parchment_mappings_version
+        minecraftVersion = project.parchment_minecraft_version
+    }
+
+    runs {
+        client {
+            client()
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+
+        server {
+            server()
+            programArgument '--nogui'
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+
+        gameTestServer {
+            type = "gameTestServer"
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+
+        data {
+            data()
+            programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+        }
+
+        configureEach {
+            systemProperty 'forge.logging.markers', 'REGISTRIES'
+            logLevel = org.slf4j.event.Level.DEBUG
+        }
+    }
+
+    mods {
+        "${mod_id}" {
+            sourceSet(sourceSets.main)
+        }
+    }
+}
+
+configurations {
+    runtimeClasspath.extendsFrom localRuntime
+}
+
+// ─────────────────────────────────────────────────────────────
+// Dependencies
+// 公開 jar には compileOnly + localRuntime のいずれもバンドルされない
+// ─────────────────────────────────────────────────────────────
+dependencies {
+    // ─── Production (本MODが連携する API) ──────────────────────────
+    // ExplorersCompass: 必須依存 (構造物 DataComponent 監視のホスト)
+    compileOnly "maven.modrinth:explorers-compass:${ec_version}"
+
+    // Nature's Compass: 任意依存 (バイオーム DataComponent 監視のホスト)
+    compileOnly "maven.modrinth:natures-compass:${nc_version}"
+
+    // Xaero's Minimap / World Map は API 不要 (player.sendSystemMessage で xaero-waypoint:
+    // チャット書式を送信するだけ・クライアント側 Xaero がそれを検出して waypoint プロンプト)
+
+    // ─── Dev-only (runClient テスト用、公開 jar には含まれない) ─────
+    localRuntime "maven.modrinth:explorers-compass:${ec_version}"
+    localRuntime "maven.modrinth:natures-compass:${nc_version}"
+    // Xaero's: 実機検証用。本 MOD は Xaero に何の参照も持たないので compileOnly すら不要、
+    // runClient 時に Xaero's クライアントが xaero-waypoint: 行を拾うのを確認するためだけに同梱。
+    localRuntime "maven.modrinth:xaeros-minimap:${xaeros_minimap_version}"
+    localRuntime "maven.modrinth:xaeros-world-map:${xaeros_worldmap_version}"
+}
+
+var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
+    var replaceProperties = [
+            minecraft_version      : minecraft_version,
+            minecraft_version_range: minecraft_version_range,
+            neo_version            : neo_version,
+            loader_version_range   : loader_version_range,
+            mod_id                 : mod_id,
+            mod_name               : mod_name,
+            mod_license            : mod_license,
+            mod_version            : mod_version,
+    ]
+    inputs.properties replaceProperties
+    expand replaceProperties
+    from "src/main/templates"
+    into "build/generated/sources/modMetadata"
+}
+sourceSets.main.resources.srcDir generateModMetadata
+neoForge.ideSyncTask generateModMetadata
+
+publishing {
+    publications {
+        register('mavenJava', MavenPublication) {
+            from components.java
+        }
+    }
+    repositories {
+        maven {
+            url "file://${project.projectDir}/repo"
+        }
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
+    }
+}
+
+
+// LICENSE jar 同梱 (MIT shall be included in all copies)
+def licenseRenamed = "LICENSE_${mod_id}"
+tasks.named('jar', Jar).configure {
+    from('LICENSE') { rename { licenseRenamed } }
+}

@@ -1,0 +1,8 @@
+{
+  "message.compasstomapxaeros.structure_found": "Löydettiin rakenne %s kohdasta %s",
+  "message.compasstomapxaeros.biome_found": "Löydettiin biomi %s kohdasta %s",
+  "compasstomapxaeros.configuration.title": "Compass to Map",
+  "compasstomapxaeros.configuration.feature": "Ominaisuudet",
+  "compasstomapxaeros.configuration.notification": "Ilmoitukset",
+  "compasstomapxaeros.configuration.appearance": "Ulkoasu"
+}
