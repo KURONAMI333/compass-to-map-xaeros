@@ -1,0 +1,48 @@
+### Gradle ###
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/**/build/
+
+### IntelliJ IDEA ###
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/**/out/
+
+.run/
+
+### Eclipse ###
+.apt_generated
+.classpath
+.eclipse/
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/**/bin/
+
+### VS Code ###
+.vscode/
+
+### Mac OS ###
+.DS_Store
+
+### Minecraft Modding ###
+run/
+!**/src/**/run/
+**/src/generated/**/.cache/
+repo/
+!**/src/**/repo/
+
+### 3rd-party jars (NOT redistributable) ###
+# Local Maven cache for ForgeGradle 6 Modrinth 307 redirect bug workaround.
+# Contains Explorer's Compass / Nature's Compass / Xaero's Minimap / Xaero's
+# World Map jars which we may not redistribute. Each developer must download
+# these themselves.
+libs-local/
+**/libs-local/

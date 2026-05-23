@@ -1,0 +1,48 @@
+# Compass to Map: Xaero's edition - Forge 1.21.1 mods.toml
+modLoader="javafml"
+loaderVersion="${loader_version_range}"
+license="${mod_license}"
+
+[[mods]]
+modId="${mod_id}"
+version="${mod_version}"
+displayName="${mod_name}"
+authors="${mod_authors}"
+displayURL="https://github.com/KURONAMI333/compass-to-map-xaeros"
+issueTrackerURL="https://github.com/KURONAMI333/compass-to-map-xaeros/issues"
+description='''
+${mod_description}
+'''
+
+# ─── 必須依存 ───────────────────────────────────────────────
+[[dependencies.${mod_id}]]
+    modId="forge"
+    type="required"
+    versionRange="${forge_version_range}"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="minecraft"
+    type="required"
+    versionRange="${minecraft_version_range}"
+    ordering="NONE"
+    side="BOTH"
+
+# ─── 任意依存 (どちらか or 両方) ─────────────────────────
+[[dependencies.${mod_id}]]
+    modId="explorerscompass"
+    type="optional"
+    versionRange="[0,)"
+    ordering="AFTER"
+    side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="naturescompass"
+    type="optional"
+    versionRange="[0,)"
+    ordering="AFTER"
+    side="BOTH"
+
+# Xaero's Minimap / World Map: 依存宣言不要 (Reflection で internal API を直叩き。
+# 入っていれば waypoint 即追加、入っていなくても crash しない silent fail)

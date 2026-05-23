@@ -1,0 +1,8 @@
+{
+  "message.compasstomapxaeros.structure_found": "%s を %s で発見しました",
+  "message.compasstomapxaeros.biome_found": "バイオーム %s を %s で発見しました",
+  "compasstomapxaeros.configuration.title": "Compass to Map",
+  "compasstomapxaeros.configuration.feature": "機能",
+  "compasstomapxaeros.configuration.notification": "通知",
+  "compasstomapxaeros.configuration.appearance": "見た目"
+}
