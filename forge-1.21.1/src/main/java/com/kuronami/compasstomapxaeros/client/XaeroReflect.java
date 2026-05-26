@@ -2,6 +2,10 @@ package com.kuronami.compasstomapxaeros.client;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Xaero's Minimap の internal API への Reflection ラッパー（pure / 状態なし）。
@@ -9,7 +13,7 @@ import java.lang.reflect.Method;
  * <p>Xaero's は公式 Java API を提供してないので、本 MOD はバイトコード解析で
  * 確定した public メソッド / public static field チェーンを Reflection で叩く。
  *
- * <p>叩く対象 (xaerominimap Forge 1.21.1 build (ub3haes5 = 25.3.13) で内部クラスが同名であることを想定):
+ * <p>叩く対象 (xaerominimap NeoForge 1.21.1 25.3.13 で検証):
  * <ul>
  *   <li>{@code xaero.hud.minimap.BuiltInHudModules.MINIMAP} (public static field)</li>
  *   <li>{@code xaero.hud.module.HudModule#getCurrentSession()}</li>
@@ -29,7 +33,53 @@ import java.lang.reflect.Method;
  */
 public final class XaeroReflect {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger("compasstomapxaeros");
+
+    /** Xaero's Minimap がクラスパスに居るかの一度限り判定キャッシュ。null=未判定 / true=居る / false=居ない。 */
+    private static volatile Boolean xaeroPresent = null;
+
+    /** Reflection 失敗 (API drift) の警告を 1 セッション 1 回だけ出すためのフラグ。 */
+    private static final AtomicBoolean WARNED_API_DRIFT = new AtomicBoolean(false);
+
     private XaeroReflect() {}
+
+    /**
+     * Xaero's Minimap がクラスパスにロードされているかを判定 (結果はキャッシュ)。
+     *
+     * <p>不在＝Xaero を入れてないユーザーの正常状態 → silent fail で OK。
+     * 居る＝API drift 検出時に warn する正当性がある状態。
+     */
+    private static boolean isXaeroPresent() {
+        Boolean cached = xaeroPresent;
+        if (cached != null) return cached;
+        boolean present;
+        try {
+            Class.forName("xaero.hud.minimap.BuiltInHudModules");
+            present = true;
+        } catch (Throwable t) {
+            present = false;
+        }
+        xaeroPresent = present;
+        return present;
+    }
+
+    /**
+     * Xaero 在中の状態で reflection 失敗 (API drift) を検出した時、初回 1 回だけ warn を吐く。
+     *
+     * <p>毎構造物発見ごとにログを吐かないため、`AtomicBoolean` で once-only ガード。
+     * Xaero 不在環境では何も出さない (issue triage 時のノイズ削減)。
+     */
+    private static void warnApiDriftOnce(String operation, Throwable cause) {
+        if (!isXaeroPresent()) return;
+        if (WARNED_API_DRIFT.compareAndSet(false, true)) {
+            LOGGER.warn("[compasstomapxaeros] Xaero's Minimap API drift detected at '{}' "
+                    + "(Xaero is installed but reflection failed: {}). "
+                    + "This addon's Xaero integration is disabled for this session. "
+                    + "Please report at https://github.com/KURONAMI333/compass-to-map-xaeros/issues "
+                    + "with your Xaero's Minimap version.",
+                    operation, cause.toString());
+        }
+    }
 
     /** 現在の {@code MinimapWorld}。Xaero's 不在 / セッション未起動なら null。 */
     public static Object getCurrentMinimapWorld() {
@@ -49,6 +99,7 @@ public final class XaeroReflect {
             Class<?> worldManagerCls = Class.forName("xaero.hud.minimap.world.MinimapWorldManager");
             return worldManagerCls.getMethod("getCurrentWorld").invoke(worldManager);
         } catch (Throwable t) {
+            warnApiDriftOnce("getCurrentMinimapWorld", t);
             return null;
         }
     }
@@ -60,6 +111,7 @@ public final class XaeroReflect {
             Class<?> worldCls = Class.forName("xaero.hud.minimap.world.MinimapWorld");
             return worldCls.getMethod("getCurrentWaypointSet").invoke(minimapWorld);
         } catch (Throwable t) {
+            warnApiDriftOnce("getCurrentWaypointSet", t);
             return null;
         }
     }
@@ -91,6 +143,7 @@ public final class XaeroReflect {
             }
             return false;
         } catch (Throwable t) {
+            warnApiDriftOnce("hasWaypoint", t);
             return false;
         }
     }
@@ -119,6 +172,7 @@ public final class XaeroReflect {
             );
             return ctor.newInstance(x, y, z, name, initials, color, purpose, temporary, yIncluded);
         } catch (Throwable t) {
+            warnApiDriftOnce("newWaypoint", t);
             return null;
         }
     }
@@ -139,6 +193,7 @@ public final class XaeroReflect {
             add.invoke(waypointSet, waypoint, addToTop);
             return true;
         } catch (Throwable t) {
+            warnApiDriftOnce("addWaypoint", t);
             return false;
         }
     }
