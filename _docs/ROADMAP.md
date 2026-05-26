@@ -26,7 +26,7 @@
 - [ ] **チャンク強制ロード or async 高さ取得** (Y 座標を構造物の実位置に近づける)
 - [ ] **namespace prefix** (modded 構造物の名前衝突対策)
 - [ ] **Reflection cache** (起動時 lazy init)
-- [ ] **silent fail の初回 1 回 LOGGER.warn** (公開後の issue triage コスト削減)
+- [x] ~~**silent fail の初回 1 回 LOGGER.warn** (公開後の issue triage コスト削減)~~ → **v0.1.1 で前倒し実装済** (`XaeroReflect#warnApiDriftOnce`、`isXaeroPresent` で Xaero 不在時は黙る、`AtomicBoolean` で once-only、5 catch 全てで呼出)
 
 ## 🚀 Phase 3: 公開・コミュニティ
 
