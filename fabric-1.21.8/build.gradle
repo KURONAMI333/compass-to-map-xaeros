@@ -1,0 +1,74 @@
+plugins {
+    id 'fabric-loom' version '1.14.10'
+    id 'maven-publish'
+}
+
+version = mod_version
+group = mod_group_id
+
+base {
+    archivesName = mod_id
+}
+
+repositories {
+    maven {
+        name = "Modrinth"
+        url = "https://api.modrinth.com/maven"
+        content { includeGroup "maven.modrinth" }
+    }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${minecraft_version}"
+    mappings loom.officialMojangMappings()
+    modImplementation "net.fabricmc:fabric-loader:${loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
+    modImplementation "maven.modrinth:forge-config-api-port:${fcap_version}"
+
+    // Production (compileOnly: jar に含めない)
+    modCompileOnly "maven.modrinth:explorers-compass:${ec_version}"
+    modCompileOnly "maven.modrinth:natures-compass:${nc_version}"
+
+    // Xaero's Minimap / World Map は API 不要 (Reflection で internal API 直叩き)
+
+    // FCAP の transitive: UnmodifiableConfig (com.electronwill.night-config) を compileOnly で公開
+    compileOnly "com.electronwill.night-config:core:3.6.7"
+
+    // Dev-only (runClient テスト用)
+    modRuntimeOnly "maven.modrinth:explorers-compass:${ec_version}"
+    modRuntimeOnly "maven.modrinth:natures-compass:${nc_version}"
+    modRuntimeOnly "maven.modrinth:xaeros-minimap:${xaeros_minimap_version}"
+    modRuntimeOnly "maven.modrinth:xaeros-world-map:${xaeros_worldmap_version}"
+}
+
+processResources {
+    inputs.property "version", project.version
+
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version,
+                "minecraft_version": minecraft_version,
+                "loader_version": loader_version,
+                "fabric_version": fabric_version,
+                "mod_id": mod_id,
+                "mod_name": mod_name,
+                "mod_description": mod_description,
+                "mod_authors": mod_authors,
+                "mod_license": mod_license
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.encoding = "UTF-8"
+    it.options.release = 21
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+jar {
+    from("LICENSE") {
+        rename { "${it}_${mod_id}" }
+    }
+}

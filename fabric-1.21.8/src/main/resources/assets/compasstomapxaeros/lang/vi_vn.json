@@ -1,0 +1,8 @@
+{
+  "message.compasstomapxaeros.structure_found": "Đã tìm thấy cấu trúc %s tại %s",
+  "message.compasstomapxaeros.biome_found": "Đã tìm thấy biome %s tại %s",
+  "compasstomapxaeros.configuration.title": "Compass to Map",
+  "compasstomapxaeros.configuration.feature": "Tính năng",
+  "compasstomapxaeros.configuration.notification": "Thông báo",
+  "compasstomapxaeros.configuration.appearance": "Giao diện"
+}
