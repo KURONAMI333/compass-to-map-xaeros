@@ -1,0 +1,8 @@
+{
+  "message.compasstomapxaeros.structure_found": "Виявлено структуру %s в %s",
+  "message.compasstomapxaeros.biome_found": "Виявлено біом %s в %s",
+  "compasstomapxaeros.configuration.title": "Compass to Map",
+  "compasstomapxaeros.configuration.feature": "Функції",
+  "compasstomapxaeros.configuration.notification": "Сповіщення",
+  "compasstomapxaeros.configuration.appearance": "Зовнішній вигляд"
+}
