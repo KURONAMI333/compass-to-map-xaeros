@@ -1,0 +1,80 @@
+plugins {
+    id 'net.fabricmc.fabric-loom' version '1.16.3'
+    id 'maven-publish'
+}
+
+version = mod_version
+group = mod_group_id
+
+base {
+    archivesName = mod_id
+}
+
+repositories {
+    maven {
+        name = "Modrinth"
+        url = "https://api.modrinth.com/maven"
+        content { includeGroup "maven.modrinth" }
+    }
+}
+
+// MC 26.x は難読化解除済み (intermediary/proguard mappings 廃止)。mappings 宣言は不要
+// (26.2_MIGRATION_NOTES.md §1.1)。mod 依存も remap 不要なので modXxx ではなく通常の
+// implementation/compileOnly/runtimeOnly で載せる。
+dependencies {
+    minecraft "com.mojang:minecraft:${minecraft_version}"
+    implementation "net.fabricmc:fabric-loader:${loader_version}"
+    implementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
+    implementation "maven.modrinth:forge-config-api-port:${fcap_version}"
+
+    // Production (compileOnly: jar に含めない)
+    compileOnly "maven.modrinth:explorers-compass:${ec_version}"
+    compileOnly "maven.modrinth:natures-compass:${nc_version}"
+
+    // Xaero's Minimap / World Map は API 不要 (Reflection で internal API 直叩き)
+
+    // FCAP の transitive: UnmodifiableConfig (com.electronwill.night-config) を compileOnly で公開
+    compileOnly "com.electronwill.night-config:core:3.6.7"
+
+    // Dev-only (runClient テスト用)
+    runtimeOnly "maven.modrinth:explorers-compass:${ec_version}"
+    runtimeOnly "maven.modrinth:natures-compass:${nc_version}"
+    runtimeOnly "maven.modrinth:xaeros-minimap:${xaeros_minimap_version}"
+    runtimeOnly "maven.modrinth:xaeros-world-map:${xaeros_worldmap_version}"
+}
+
+processResources {
+    inputs.property "version", project.version
+
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version,
+                "minecraft_version": minecraft_version,
+                "loader_version": loader_version,
+                "fabric_version": fabric_version,
+                "mod_id": mod_id,
+                "mod_name": mod_name,
+                "mod_description": mod_description,
+                "mod_authors": mod_authors,
+                "mod_license": mod_license
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.encoding = "UTF-8"
+    it.options.release = 25
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_25
+    targetCompatibility = JavaVersion.VERSION_25
+}
+
+// LICENSE jar 同梱 (MIT shall be included in all copies)
+// LICENSE は repo root にのみ置く (各 cell は独立 build なので相対参照する)
+def licenseFile = file("../LICENSE")
+jar {
+    inputs.file(licenseFile)
+    from(licenseFile) {
+        rename { "${it}_${mod_id}" }
+    }
+}
