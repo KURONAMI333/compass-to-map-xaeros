@@ -149,7 +149,9 @@ idea {
 
 
 // LICENSE jar 同梱 (MIT shall be included in all copies)
+def licenseFile = file('LICENSE')
 def licenseRenamed = "LICENSE_${mod_id}"
 tasks.named('jar', Jar).configure {
-    from('LICENSE') { rename { licenseRenamed } }
+    inputs.file(licenseFile)
+    from(licenseFile) { rename { licenseRenamed } }
 }
