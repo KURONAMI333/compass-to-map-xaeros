@@ -1,0 +1,57 @@
+# Compass to Map: Xaero's Minimap & Explorer's Compass & Nature's Compass Addon - mods.toml
+modLoader="javafml"
+loaderVersion="${loader_version_range}"
+
+license="${mod_license}"
+
+[[mods]]
+modId="${mod_id}"
+version="${mod_version}"
+displayName="${mod_name}"
+authors="KURONAMI"
+displayURL="https://github.com/KURONAMI333/compass-to-map-xaeros"
+issueTrackerURL="https://github.com/KURONAMI333/compass-to-map-xaeros/issues"
+description='''
+Auto-register found structures (Explorer's Compass) and/or biomes (Nature's Compass) as permanent Xaero's Minimap waypoints. No prompt, no edit screen — the waypoint just appears the instant you find it. Requires this mod on both client and server (Xaero's Minimap itself is client-side only as usual).
+'''
+
+# ─────────────────────────────────────────────────
+# 必須依存
+# ─────────────────────────────────────────────────
+# NeoForge 本体: パッチまで切らずマイナーで止める (26.1.2.92 まで切ると無駄に競合する)
+[[dependencies.${mod_id}]]
+    modId="neoforge"
+    type="required"
+    versionRange="[26.1.2,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.${mod_id}]]
+    modId="minecraft"
+    type="required"
+    versionRange="${minecraft_version_range}"
+    ordering="NONE"
+    side="BOTH"
+
+# Explorer's Compass: 構造物検出のホスト (任意)
+# 注意: EC のバージョン文字列 "1.21.1-3.4.0-neoforge" は Maven 比較で先頭 "1.21.1" が
+# 比較対象になるため、versionRange は緩く取り、try-catch + 永久サスペンドで API 不一致対応。
+# v2.0+ から optional に降格: NC のみ導入のユーザーや、EC 入れず NC だけ使いたい人に対応。
+[[dependencies.${mod_id}]]
+    modId="explorerscompass"
+    type="optional"
+    versionRange="[0,)"
+    ordering="AFTER"
+    side="BOTH"
+
+# Nature's Compass: バイオーム検出のホスト (任意)
+# EC と同作者・API 同形なので、片方だけでも両方でも動作する。
+[[dependencies.${mod_id}]]
+    modId="naturescompass"
+    type="optional"
+    versionRange="[0,)"
+    ordering="AFTER"
+    side="BOTH"
+
+# Xaero's Minimap / World Map: 依存宣言不要 (Reflection で internal API を直叩き。
+# Xaero 不在 / API 不一致なら silent fail で何もしない・crash しない。)
