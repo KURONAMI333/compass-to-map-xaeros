@@ -1,0 +1,8 @@
+{
+  "message.compasstomapxaeros.structure_found": "%s struktúra felfedezve itt: %s",
+  "message.compasstomapxaeros.biome_found": "%s bióma felfedezve itt: %s",
+  "compasstomapxaeros.configuration.title": "Compass to Map",
+  "compasstomapxaeros.configuration.feature": "Funkciók",
+  "compasstomapxaeros.configuration.notification": "Értesítések",
+  "compasstomapxaeros.configuration.appearance": "Megjelenés"
+}
