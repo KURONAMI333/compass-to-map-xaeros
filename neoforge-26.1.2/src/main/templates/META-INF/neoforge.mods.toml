@@ -22,7 +22,7 @@ Auto-register found structures (Explorer's Compass) and/or biomes (Nature's Comp
 [[dependencies.${mod_id}]]
     modId="neoforge"
     type="required"
-    versionRange="[26.1.2,)"
+    versionRange="[26.1.2,26.2)"
     ordering="NONE"
     side="BOTH"
 
