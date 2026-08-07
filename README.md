@@ -2,7 +2,7 @@
 
 > Explorer's Compass / Nature's Compass で構造物・バイオームを発見した瞬間に、Xaero's Minimap に**永続 waypoint** を自動登録する。プロンプト無し、UI 介入ゼロ。
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![License: All Rights Reserved](https://img.shields.io/badge/License-All%20Rights%20Reserved-lightgrey.svg)](LICENSE)
 [![Modrinth](https://img.shields.io/badge/Modrinth-compass--to--map--xaeros-00AF5C)](https://modrinth.com/mod/compass-to-map-xaeros)
 [![CurseForge](https://img.shields.io/badge/CurseForge-compass--to--map--xaeros-F16436)](https://www.curseforge.com/minecraft/mc-mods/compass-to-map-xaeros)
 
@@ -115,7 +115,7 @@ A. JourneyMap 版の姉妹 MOD を別途公開。本 MOD は Xaero's に特化�
 A. 対応済み。NC を入れてれば自動でバイオーム waypoint も登録されます。NC が入ってなくても構造物機能だけで動作します。
 
 **Q. 自分の作った modpack に入れていい？**
-A. もちろん。MIT ライセンスなので modpack 利用 OK、許可・通知不要です。
+A. もちろん。modpack への同梱は自由です（許可・通知不要）。
 
 **Q. シングルプレイとマルチプレイ両方で動く？**
 A. 両方対応。マルチサーバではサーバ・クライアント両方に本 MOD を入れてください（Xaero's はクライアントのみで OK）。
@@ -136,7 +136,7 @@ GitHub Issues: [Issues](https://github.com/KURONAMI333/compass-to-map-xaeros/iss
 
 ## License
 
-[MIT License](LICENSE)
+[All Rights Reserved](LICENSE)
 
 ---
 

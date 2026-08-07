@@ -69,7 +69,7 @@ java {
     targetCompatibility = JavaVersion.VERSION_25
 }
 
-// LICENSE jar 同梱 (MIT shall be included in all copies)
+// LICENSE jar 同梱
 // LICENSE は repo root にのみ置く (各 cell は独立 build なので相対参照する)
 def licenseFile = file("../LICENSE")
 jar {

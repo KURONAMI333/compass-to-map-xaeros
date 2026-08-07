@@ -16,7 +16,7 @@
 - [x] **silent fail**: Xaero 不在 / API 不一致は全 catch で吸収、crash しない
 - [x] Config: `feature.enabled` / `feature.enableStructure` / `feature.enableBiome` / `notification.notifyOnFound`
 - [x] 22 言語 lang ファイル (zh_cn/zh_tw は `%1$s`/`%2$s` 位置指定で引数順正しく)
-- [x] LICENSE (MIT) を jar 同梱
+- [x] LICENSE (All Rights Reserved) を jar 同梱
 - [x] **マルチローダー対応**: NeoForge 1.21.1 / Forge 1.21.1 / Forge 1.20.1 / Fabric 1.21.1 / Fabric 1.20.1
 
 ## 🔮 Phase 2: UX 改善
@@ -48,4 +48,4 @@
 | OP 限定 TP 提案 | サバイバルプレイヤーに「TP できる」誤期待を与えない |
 | 単色 (Xaero PURPLE) | Xaero's の既存色と被らない識別マーカー。Phase 2 でカテゴリ別色分け予定 |
 | サーバ・クライアント両側必須 | custom packet 経路のため。Xaero's 自体は CLIENT のみで OK |
-| MIT ライセンス | modpack 採用しやすい |
+| All Rights Reserved (modpack 同梱は許可) | modpack 採用しやすい |
