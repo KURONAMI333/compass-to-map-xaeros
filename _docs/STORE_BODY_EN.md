@@ -1,5 +1,3 @@
-# Compass to Map: Xaero's edition
-
 Auto-registers the structures and biomes you find with Explorer's Compass and Nature's Compass as permanent Xaero's Minimap waypoints — no prompt, no edit screen, the waypoint just appears.
 
 Find a structure or biome with Explorer's Compass / Nature's Compass and you normally have to add the coordinates to Xaero's by hand. This addon does it silently, the instant you find it.
@@ -23,6 +21,8 @@ Find a structure or biome with Explorer's Compass / Nature's Compass and you nor
 - [Xaero's Minimap](https://modrinth.com/mod/xaeros-minimap) and/or [Xaero's World Map](https://modrinth.com/mod/xaeros-world-map) (client) — the waypoint target
 - Fabric only: [Forge Config API Port](https://modrinth.com/mod/forge-config-api-port)
 
-Install on the server and on each client — the server detects discoveries and sends each one to the right player, whose client adds the waypoint. For the JourneyMap version, see the sister mod Compass to Map.
+For the JourneyMap version, see the sister mod Compass to Map.
 
-Free to use in any modpack. Source and issues: https://github.com/KURONAMI333/compass-to-map-xaeros
+Bugs and questions: comment on the CurseForge page, or DM @kuronami333 on X.
+
+All Rights Reserved. Modpack inclusion is allowed without permission or credit. Source: https://github.com/KURONAMI333/compass-to-map-xaeros
