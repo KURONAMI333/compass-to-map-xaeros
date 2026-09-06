@@ -143,7 +143,6 @@ GitHub Issues: [Issues](https://github.com/KURONAMI333/compass-to-map-xaeros/iss
 ## Credits
 
 - Author: KURONAMI
-- Assist: Claude (Anthropic)
 - Built on:
   - [Explorer's Compass](https://modrinth.com/mod/explorers-compass) by ChaosTheDude / MattCzyr
   - [Nature's Compass](https://modrinth.com/mod/natures-compass) by ChaosTheDude / MattCzyr
