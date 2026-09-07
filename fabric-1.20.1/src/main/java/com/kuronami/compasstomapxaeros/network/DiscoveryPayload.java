@@ -12,8 +12,13 @@ import net.minecraft.resources.ResourceLocation;
  *
  * <p>Fabric 1.20.1 は vanilla {@code CustomPacketPayload} を持たないため、
  * {@link FabricPacket} (旧 Fabric Networking API) で wire format を定義する。
+ *
+ * <p>{@code isBiome} を運ぶのは、<b>クライアント側の既存 waypoint の照合を種別で分ける</b>ため。
+ * バイオームは検索のたびに座標がぶれるので名前だけで照合し、構造物は座標が決定的なので
+ * 名前と x/z で照合する (理由は {@code DedupeKeys} の javadoc)。prettify 済みの表示名からは
+ * どちらか判別できないので、サーバ側で分かっている種別をそのまま運ぶ。
  */
-public record DiscoveryPayload(String name, int x, int y, int z) implements FabricPacket {
+public record DiscoveryPayload(String name, int x, int y, int z, boolean isBiome) implements FabricPacket {
 
     public static final PacketType<DiscoveryPayload> TYPE = PacketType.create(
             new ResourceLocation(CompassToMapXaeros.MODID, "discovery"),
@@ -21,7 +26,7 @@ public record DiscoveryPayload(String name, int x, int y, int z) implements Fabr
     );
 
     public DiscoveryPayload(FriendlyByteBuf buf) {
-        this(buf.readUtf(), buf.readInt(), buf.readInt(), buf.readInt());
+        this(buf.readUtf(), buf.readInt(), buf.readInt(), buf.readInt(), buf.readBoolean());
     }
 
     @Override
@@ -30,6 +35,7 @@ public record DiscoveryPayload(String name, int x, int y, int z) implements Fabr
         buf.writeInt(x);
         buf.writeInt(y);
         buf.writeInt(z);
+        buf.writeBoolean(isBiome);
     }
 
     @Override

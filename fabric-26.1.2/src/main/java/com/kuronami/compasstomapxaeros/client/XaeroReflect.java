@@ -117,10 +117,61 @@ public final class XaeroReflect {
     }
 
     /**
-     * 同一 (name, x, y, z) の waypoint が既に WaypointSet 内にあるか調べる。
-     * 構造物再検索で重複登録されないように呼び出し側で使う。
+     * 同じ名前で、**かつ本 MOD が立てた色** の waypoint が既に WaypointSet 内にあるか調べる
+     * （座標は見ない）。
+     *
+     * <p>バイオーム用。Nature's Compass は同じバイオームでも検索のたびに違う座標を返すので、
+     * 座標を含めた照合では再検索のたびにピンが増える（{@code DedupeKeys} の javadoc）。
+     *
+     * <p><b>色まで見るのは、WaypointSet が利用者の手作りピンと共有だから。</b>
+     * 名前だけで照合すると、利用者が自分で `Plains` という waypoint を作っていた場合に
+     * Plains バイオームのピンが<b>永久に立たなくなる</b>（Xaero のピンはディスクに残るので
+     * 再ログインでも直らない）。JourneyMap 版は {@code getWaypoints(modId)} で自分のぶんだけを
+     * 引けるので同じ問題が無く、こちらだけの対処になる。
+     *
+     * <p>色が読めない Xaero（API 変更）では色の条件を落として名前だけで照合する。
+     * その場合の最悪は「利用者のピンと同名のバイオームが立たない」で、
+     * 判定ごと諦めて重複を量産するよりは軽い。
+     *
+     * @param colorEnumName 本 MOD が使う {@code WaypointColor} の enum 名
      */
-    public static boolean hasWaypoint(Object waypointSet, String name, int x, int y, int z) {
+    public static boolean hasWaypointNamed(Object waypointSet, String name, String colorEnumName) {
+        return anyWaypoint(waypointSet, "hasWaypointNamed", (getName, getX, getZ, wp) ->
+                name.equals(getName.invoke(wp)) && isOurColor(wp, colorEnumName));
+    }
+
+    /**
+     * その waypoint が本 MOD の色か。色を読む手段が無ければ {@code true}（＝色で絞らない）。
+     */
+    private static boolean isOurColor(Object waypoint, String colorEnumName) {
+        try {
+            Object color = waypoint.getClass().getMethod("getWaypointColor").invoke(waypoint);
+            if (color == null) return true;
+            return colorEnumName.equals(((Enum<?>) color).name());
+        } catch (Throwable t) {
+            return true;
+        }
+    }
+
+    /**
+     * 同じ名前かつ同じ x/z の waypoint が既に WaypointSet 内にあるか調べる。
+     *
+     * <p>構造物用。Explorer's Compass が返すのは構造物の実位置なので座標は決定的で、
+     * x/z まで見ることで「別の村には別のピンが立つ」を保てる。
+     *
+     * <p><b>Y は見ない。</b> Y は {@code estimateY} が Heightmap から推定する値で、
+     * チャンクのロード状況で変わる。同じ構造物でもロード状況が違えば別の Y になり、
+     * Y を含めた照合はすり抜けて重複ピンになる。
+     */
+    public static boolean hasWaypointAt(Object waypointSet, String name, int x, int z) {
+        return anyWaypoint(waypointSet, "hasWaypointAt", (getName, getX, getZ, wp) ->
+                (int) getX.invoke(wp) == x
+                        && (int) getZ.invoke(wp) == z
+                        && name.equals(getName.invoke(wp)));
+    }
+
+    /** {@link #hasWaypointNamed} / {@link #hasWaypointAt} の共通部（走査と reflection の解決）。 */
+    private static boolean anyWaypoint(Object waypointSet, String label, WaypointPredicate predicate) {
         if (waypointSet == null) return false;
         try {
             Class<?> setCls = Class.forName("xaero.hud.minimap.waypoint.set.WaypointSet");
@@ -129,23 +180,22 @@ public final class XaeroReflect {
 
             Class<?> waypointCls = Class.forName("xaero.common.minimap.waypoints.Waypoint");
             Method getX = waypointCls.getMethod("getX");
-            Method getY = waypointCls.getMethod("getY");
             Method getZ = waypointCls.getMethod("getZ");
             Method getName = waypointCls.getMethod("getName");
 
             for (Object wp : it) {
-                if ((int) getX.invoke(wp) == x
-                        && (int) getY.invoke(wp) == y
-                        && (int) getZ.invoke(wp) == z
-                        && name.equals(getName.invoke(wp))) {
-                    return true;
-                }
+                if (predicate.test(getName, getX, getZ, wp)) return true;
             }
             return false;
         } catch (Throwable t) {
-            warnApiDriftOnce("hasWaypoint", t);
+            warnApiDriftOnce(label, t);
             return false;
         }
+    }
+
+    @FunctionalInterface
+    private interface WaypointPredicate {
+        boolean test(Method getName, Method getX, Method getZ, Object waypoint) throws Exception;
     }
 
     /**

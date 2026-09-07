@@ -26,6 +26,11 @@ public class CompassToMapXaerosFabric implements ModInitializer {
         // Server tick listener — 全 player iterate で発見検出
         ServerTickEvents.END_SERVER_TICK.register(CompassWatcher::onServerTick);
 
+        // Login で priming 窓を張り直す (前セッションの検索結果を登録しないため)
+        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) ->
+                CompassWatcher.onPlayerJoin(handler.player.getUUID())
+        );
+
         // Logout で player の dedupe set をクリア
         ServerPlayConnectionEvents.DISCONNECT.register((handler, server) ->
                 CompassWatcher.onPlayerDisconnect(handler.player.getUUID())

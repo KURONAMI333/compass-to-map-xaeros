@@ -102,6 +102,14 @@ dependencies {
     // runClient 時に Xaero's クライアントが xaero-waypoint: 行を拾うのを確認するためだけに同梱。
     localRuntime "maven.modrinth:xaeros-minimap:${xaeros_minimap_version}"
     localRuntime "maven.modrinth:xaeros-world-map:${xaeros_worldmap_version}"
+
+    testImplementation platform('org.junit:junit-bom:5.10.2')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test', Test) {
+    useJUnitPlatform()
 }
 
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
