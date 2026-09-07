@@ -25,11 +25,13 @@ public final class ServerDispatch {
      * @param player     発見したプレイヤー
      * @param prettyName 表示名（サーバ側で {@code CompassNames.prettify} 済み）
      * @param pos        world 座標
+     * @param isBiome    バイオーム発見なら true、構造物発見なら false
+     *                   （クライアント側の既存 waypoint 照合を種別で分けるために運ぶ）
      */
-    public static void send(ServerPlayer player, String prettyName, BlockPos pos) {
+    public static void send(ServerPlayer player, String prettyName, BlockPos pos, boolean isBiome) {
         PacketDistributor.sendToPlayer(
                 player,
-                new DiscoveryPayload(prettyName, pos.getX(), pos.getY(), pos.getZ())
+                new DiscoveryPayload(prettyName, pos.getX(), pos.getY(), pos.getZ(), isBiome)
         );
     }
 }

@@ -13,6 +13,6 @@ public final class ClientDiscoveryHandler {
     private ClientDiscoveryHandler() {}
 
     public static void handle(DiscoveryPayload payload) {
-        XaeroPersistentEmit.emit(payload.name, payload.x, payload.y, payload.z);
+        XaeroPersistentEmit.emit(payload.name, payload.x, payload.y, payload.z, payload.isBiome);
     }
 }

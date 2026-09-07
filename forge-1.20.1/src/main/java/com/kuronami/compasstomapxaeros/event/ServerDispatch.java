@@ -16,10 +16,10 @@ public final class ServerDispatch {
 
     private ServerDispatch() {}
 
-    public static void send(ServerPlayer player, String prettyName, BlockPos pos) {
+    public static void send(ServerPlayer player, String prettyName, BlockPos pos, boolean isBiome) {
         Channel.sendToPlayer(
                 player,
-                new DiscoveryPayload(prettyName, pos.getX(), pos.getY(), pos.getZ())
+                new DiscoveryPayload(prettyName, pos.getX(), pos.getY(), pos.getZ(), isBiome)
         );
     }
 }

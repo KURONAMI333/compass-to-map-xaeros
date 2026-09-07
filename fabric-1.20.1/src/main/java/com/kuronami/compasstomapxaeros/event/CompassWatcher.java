@@ -1,10 +1,6 @@
 package com.kuronami.compasstomapxaeros.event;
 
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -30,17 +26,22 @@ import net.minecraft.world.level.levelgen.Heightmap;
  */
 public final class CompassWatcher {
 
-    private static final Map<UUID, Set<String>> SEEN_KEYS = new ConcurrentHashMap<>();
-    private static final int MAX_SEEN_PER_PLAYER = 512;
+    /** 各 player の観測状態 (dedupe / ログイン時持ち越しの判定用)。ログアウト時に破棄。 */
+    private static final Map<UUID, PlayerState> STATES = new ConcurrentHashMap<>();
 
     private static volatile boolean ecApiBroken = false;
     private static volatile boolean ncApiBroken = false;
 
     private CompassWatcher() {}
 
+    /** ServerPlayConnectionEvents.JOIN から呼ばれる (mod entry で登録)。 */
+    public static void onPlayerJoin(java.util.UUID playerUuid) {
+        STATES.put(playerUuid, new PlayerState());
+    }
+
     /** ServerPlayConnectionEvents.DISCONNECT から呼ばれる。 */
     public static void onPlayerDisconnect(java.util.UUID playerUuid) {
-        SEEN_KEYS.remove(playerUuid);
+        STATES.remove(playerUuid);
     }
 
     public static void onServerTick(MinecraftServer server) {
@@ -49,10 +50,14 @@ public final class CompassWatcher {
         for (ServerPlayer player : server.getPlayerList().getPlayers()) {
             if (!(player.level() instanceof ServerLevel serverLevel)) continue;
 
+            // ログイン event を取りこぼした場合の受け皿。新規に作った state は必ず priming から始まる。
+            PlayerState state = STATES.computeIfAbsent(player.getUUID(), k -> new PlayerState());
+            boolean priming = state.consumePrimingTick();
+
             if (!ecApiBroken && Config.ENABLE_STRUCTURE.get()
                     && FabricLoader.getInstance().isModLoaded("explorerscompass")) {
                 try {
-                    ECInner.tickCheck(player, serverLevel);
+                    ECInner.tickCheck(player, serverLevel, state, priming);
                 } catch (LinkageError | RuntimeException t) {
                     ecApiBroken = true;
                     CompassToMapXaeros.LOGGER.warn(
@@ -63,7 +68,7 @@ public final class CompassWatcher {
             if (!ncApiBroken && Config.ENABLE_BIOME.get()
                     && FabricLoader.getInstance().isModLoaded("naturescompass")) {
                 try {
-                    NCInner.tickCheck(player, serverLevel);
+                    NCInner.tickCheck(player, serverLevel, state, priming);
                 } catch (LinkageError | RuntimeException t) {
                     ncApiBroken = true;
                     CompassToMapXaeros.LOGGER.warn(
@@ -74,7 +79,8 @@ public final class CompassWatcher {
     }
 
     private static final class ECInner {
-        static void tickCheck(ServerPlayer player, ServerLevel serverLevel) {
+        static void tickCheck(ServerPlayer player, ServerLevel serverLevel,
+                              PlayerState state, boolean priming) {
             Inventory inv = player.getInventory();
             ItemStack found = null;
             for (int i = 0; i < inv.items.size(); i++) {
@@ -95,14 +101,13 @@ public final class CompassWatcher {
             int z = com.chaosthedude.explorerscompass.ExplorersCompass.EXPLORERS_COMPASS_ITEM.getFoundStructureZ(found);
             String structureId = structureKey.toString();
 
-            String dimKey = serverLevel.dimension().location().toString();
-            String key = "s|" + dimKey + "|" + structureId + "|" + x + "|" + z;
-            if (!recordSeen(player.getUUID(), key)) return;
+            String key = DedupeKeys.structure(structureId, x, z);
+            if (!state.shouldRegister(key, x, z, priming)) return;
 
             int y = estimateY(serverLevel, x, z, structureId, false);
             String prettyName = CompassNames.prettify(structureId);
 
-            ServerDispatch.send(player, prettyName, new net.minecraft.core.BlockPos(x, y, z));
+            ServerDispatch.send(player, prettyName, new net.minecraft.core.BlockPos(x, y, z), /*isBiome=*/false);
 
             if (Config.NOTIFY_ON_FOUND.get()) {
                 sendChatNotification(player, "message.compasstomapxaeros.structure_found", prettyName, x, y, z);
@@ -122,7 +127,8 @@ public final class CompassWatcher {
     }
 
     private static final class NCInner {
-        static void tickCheck(ServerPlayer player, ServerLevel serverLevel) {
+        static void tickCheck(ServerPlayer player, ServerLevel serverLevel,
+                              PlayerState state, boolean priming) {
             Inventory inv = player.getInventory();
             ItemStack found = null;
             for (int i = 0; i < inv.items.size(); i++) {
@@ -143,14 +149,13 @@ public final class CompassWatcher {
             int z = com.chaosthedude.naturescompass.NaturesCompass.NATURES_COMPASS_ITEM.getFoundBiomeZ(found);
             String biomeId = biomeKey.toString();
 
-            String dimKey = serverLevel.dimension().location().toString();
-            String key = "b|" + dimKey + "|" + biomeId + "|" + x + "|" + z;
-            if (!recordSeen(player.getUUID(), key)) return;
+            String key = DedupeKeys.biome(biomeId);
+            if (!state.shouldRegister(key, x, z, priming)) return;
 
             int y = estimateY(serverLevel, x, z, biomeId, true);
             String prettyName = CompassNames.prettify(biomeId);
 
-            ServerDispatch.send(player, prettyName, new net.minecraft.core.BlockPos(x, y, z));
+            ServerDispatch.send(player, prettyName, new net.minecraft.core.BlockPos(x, y, z), /*isBiome=*/true);
 
             if (Config.NOTIFY_ON_FOUND.get()) {
                 sendChatNotification(player, "message.compasstomapxaeros.biome_found", prettyName, x, y, z);
@@ -171,19 +176,6 @@ public final class CompassWatcher {
     }
 
     // 共通
-    private static boolean recordSeen(UUID uuid, String key) {
-        Set<String> seen = SEEN_KEYS.computeIfAbsent(uuid,
-                k -> Collections.synchronizedSet(new LinkedHashSet<>()));
-        synchronized (seen) {
-            if (!seen.add(key)) return false;
-            if (seen.size() > MAX_SEEN_PER_PLAYER) {
-                Iterator<String> it = seen.iterator();
-                it.next(); it.remove();
-            }
-            return true;
-        }
-    }
-
     private static int estimateY(ServerLevel level, int x, int z, String resourceId, boolean isBiome) {
         int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
         if (y <= level.getMinBuildHeight() + 1) {

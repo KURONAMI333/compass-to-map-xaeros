@@ -19,7 +19,8 @@ public final class ClientDiscoveryHandler {
 
     public static void handle(DiscoveryPayload payload, LocalPlayer player, PacketSender responseSender) {
         Minecraft.getInstance().execute(() ->
-                XaeroPersistentEmit.emit(payload.name(), payload.x(), payload.y(), payload.z())
+                XaeroPersistentEmit.emit(payload.name(), payload.x(), payload.y(), payload.z(),
+                        payload.isBiome())
         );
     }
 }
