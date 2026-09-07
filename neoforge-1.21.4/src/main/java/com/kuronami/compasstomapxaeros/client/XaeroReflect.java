@@ -75,7 +75,7 @@ public final class XaeroReflect {
             LOGGER.warn("[compasstomapxaeros] Xaero's Minimap API drift detected at '{}' "
                     + "(Xaero is installed but reflection failed: {}). "
                     + "This addon's Xaero integration is disabled for this session. "
-                    + "Please report at https://github.com/KURONAMI333/compass-to-map-xaeros/issues "
+                    + "Please report in the comments at https://www.curseforge.com/minecraft/mc-mods/compass-to-map-xaeros/comments "
                     + "with your Xaero's Minimap version.",
                     operation, cause.toString());
         }
