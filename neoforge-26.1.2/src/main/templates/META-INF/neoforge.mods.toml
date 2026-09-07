@@ -9,8 +9,8 @@ modId="${mod_id}"
 version="${mod_version}"
 displayName="${mod_name}"
 authors="KURONAMI"
-displayURL="https://github.com/KURONAMI333/compass-to-map-xaeros"
-issueTrackerURL="https://github.com/KURONAMI333/compass-to-map-xaeros/issues"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/compass-to-map-xaeros"
+issueTrackerURL="https://www.curseforge.com/minecraft/mc-mods/compass-to-map-xaeros/comments"
 description='''
 Auto-register found structures (Explorer's Compass) and/or biomes (Nature's Compass) as permanent Xaero's Minimap waypoints. No prompt, no edit screen — the waypoint just appears the instant you find it. Requires this mod on both client and server (Xaero's Minimap itself is client-side only as usual).
 '''

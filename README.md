@@ -130,7 +130,7 @@ A. Reflection が silent fail して何も起きません (crash はしません
 
 ## Bug Reports / Feature Requests
 
-GitHub Issues: [Issues](https://github.com/KURONAMI333/compass-to-map-xaeros/issues)
+CurseForge のコメント欄か、X の [@kuronami333](https://x.com/kuronami333) の DM へお願いします: [compass-to-map-xaeros](https://www.curseforge.com/minecraft/mc-mods/compass-to-map-xaeros)
 
 ---
 
