@@ -122,3 +122,8 @@ tasks.named('jar', Jar).configure {
     inputs.file(licenseFile)
     from(licenseFile) { rename { licenseRenamed } }
 }
+
+// 地図名を同列に明示した正式配布JAR名。
+tasks.named('jar').configure {
+    archiveFileName = "compass-to-map-xaero-${minecraft_version}-forge-${mod_version}.jar"
+}

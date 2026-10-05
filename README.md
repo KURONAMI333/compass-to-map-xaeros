@@ -48,3 +48,7 @@ Downloads: [CurseForge](https://www.curseforge.com/minecraft/mc-mods/compass-to-
 For bugs and questions, comment on the [CurseForge page](https://www.curseforge.com/minecraft/mc-mods/compass-to-map-xaeros) or DM [@kuronami333 on X](https://x.com/kuronami333).
 
 [Source](https://github.com/KURONAMI333/compass-to-map-xaeros) · [License](LICENSE)
+
+## Download filenames
+
+From version 0.1.3, release files use `compass-to-map-xaero-<minecraft>-<loader>-<modversion>.jar`, for example `compass-to-map-xaero-1.21.1-neoforge-0.1.3.jar`.
