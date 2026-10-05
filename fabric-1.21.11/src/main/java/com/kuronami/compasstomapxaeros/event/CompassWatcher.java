@@ -107,15 +107,14 @@ public final class CompassWatcher {
         static void tickCheck(ServerPlayer player, ServerLevel serverLevel,
                               PlayerState state, boolean priming) {
             Inventory inv = player.getInventory();
-            ItemStack found = null;
             for (int i = 0; i < inv.getContainerSize(); i++) {
                 ItemStack stack = inv.getItem(i);
-                if (isFound(stack)) {
-                    found = stack;
-                    break;
-                }
+                if (isFound(stack)) processFound(stack, player, serverLevel, state, priming);
             }
-            if (found == null) return;
+        }
+
+        private static void processFound(ItemStack found, ServerPlayer player, ServerLevel serverLevel,
+                                         PlayerState state, boolean priming) {
 
             String structureId = found.get(com.chaosthedude.explorerscompass.ExplorersCompass.STRUCTURE_ID);
             Integer x = found.get(com.chaosthedude.explorerscompass.ExplorersCompass.FOUND_X);
@@ -160,15 +159,14 @@ public final class CompassWatcher {
         static void tickCheck(ServerPlayer player, ServerLevel serverLevel,
                               PlayerState state, boolean priming) {
             Inventory inv = player.getInventory();
-            ItemStack found = null;
             for (int i = 0; i < inv.getContainerSize(); i++) {
                 ItemStack stack = inv.getItem(i);
-                if (isFound(stack)) {
-                    found = stack;
-                    break;
-                }
+                if (isFound(stack)) processFound(stack, player, serverLevel, state, priming);
             }
-            if (found == null) return;
+        }
+
+        private static void processFound(ItemStack found, ServerPlayer player, ServerLevel serverLevel,
+                                         PlayerState state, boolean priming) {
 
             String biomeId = found.get(com.chaosthedude.naturescompass.NaturesCompass.BIOME_ID);
             Integer x = found.get(com.chaosthedude.naturescompass.NaturesCompass.FOUND_X);

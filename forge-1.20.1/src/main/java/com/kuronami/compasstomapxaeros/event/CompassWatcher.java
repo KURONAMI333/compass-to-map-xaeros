@@ -94,16 +94,16 @@ public final class CompassWatcher {
         static void tickCheck(ServerPlayer player, ServerLevel serverLevel,
                               PlayerState state, boolean priming) {
             Inventory inv = player.getInventory();
-            ItemStack found = null;
             for (int i = 0; i < inv.items.size(); i++) {
                 ItemStack stack = inv.items.get(i);
-                if (isFound(stack)) { found = stack; break; }
+                if (isFound(stack)) processFound(stack, player, serverLevel, state, priming);
             }
-            if (found == null) {
-                ItemStack off = inv.offhand.get(0);
-                if (isFound(off)) found = off;
-            }
-            if (found == null) return;
+            ItemStack off = inv.offhand.get(0);
+            if (isFound(off)) processFound(off, player, serverLevel, state, priming);
+        }
+
+        private static void processFound(ItemStack found, ServerPlayer player, ServerLevel serverLevel,
+                                         PlayerState state, boolean priming) {
 
             // EC 1.20.1: instance method 経由 (DataComponents 未導入)
             ResourceLocation structureKey = com.chaosthedude.explorerscompass.ExplorersCompass.explorersCompass.getStructureKey(found);
@@ -145,16 +145,16 @@ public final class CompassWatcher {
         static void tickCheck(ServerPlayer player, ServerLevel serverLevel,
                               PlayerState state, boolean priming) {
             Inventory inv = player.getInventory();
-            ItemStack found = null;
             for (int i = 0; i < inv.items.size(); i++) {
                 ItemStack stack = inv.items.get(i);
-                if (isFound(stack)) { found = stack; break; }
+                if (isFound(stack)) processFound(stack, player, serverLevel, state, priming);
             }
-            if (found == null) {
-                ItemStack off = inv.offhand.get(0);
-                if (isFound(off)) found = off;
-            }
-            if (found == null) return;
+            ItemStack off = inv.offhand.get(0);
+            if (isFound(off)) processFound(off, player, serverLevel, state, priming);
+        }
+
+        private static void processFound(ItemStack found, ServerPlayer player, ServerLevel serverLevel,
+                                         PlayerState state, boolean priming) {
 
             ResourceLocation biomeKey = com.chaosthedude.naturescompass.NaturesCompass.naturesCompass.getBiomeKey(found);
             if (biomeKey == null) return;

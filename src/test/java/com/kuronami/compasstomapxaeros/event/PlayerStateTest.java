@@ -98,4 +98,45 @@ class PlayerStateTest {
         // 最古が押し出されたので、もう一度登録できる
         assertTrue(s.shouldRegister(first, 0, 0, false));
     }
+
+    @Test
+    @DisplayName("持ち越し2本が同じkeyで違う座標でも、両方抑制する")
+    void bothCarriedOverCoordinatesStayStaleAfterSlotReorder() {
+        PlayerState s = new PlayerState();
+        runPriming(s, () -> {
+            assertFalse(s.shouldRegister(BAMBOO, 419, -315, true));
+            assertFalse(s.shouldRegister(BAMBOO, 415, -279, true));
+        });
+        // スロットを入れ替え、後ろにいたコンパスを先に走査する。
+        assertFalse(s.shouldRegister(BAMBOO, 415, -279, false));
+        assertFalse(s.shouldRegister(BAMBOO, 419, -315, false));
+        // FOUND が一時的に手元から消えたり、次元を移っても解除しない。
+        assertFalse(s.shouldRegister(BAMBOO, 419, -315, false));
+        assertTrue(s.shouldRegister(BAMBOO, 410, -277, false), "新しい座標での再検索は登録する");
+        assertFalse(s.shouldRegister(BAMBOO, 415, -279, false), "登録後は同じkeyを二重登録しない");
+    }
+
+    @Test
+    @DisplayName("先の既登録FOUNDが後続の別発見を妨げない")
+    void laterDiscoveryRegistersDespiteEarlierSeenResult() {
+        PlayerState s = new PlayerState();
+        runPriming(s, () -> { });
+        String oldKey = DedupeKeys.structure("minecraft:village_plains", 100, 200);
+        String newKey = DedupeKeys.structure("minecraft:igloo", 800, 900);
+        assertTrue(s.shouldRegister(oldKey, 100, 200, false));
+        // 走査は各FOUNDを順に呼ぶ。最初が既登録でも後続を評価できる。
+        assertFalse(s.shouldRegister(oldKey, 100, 200, false));
+        assertTrue(s.shouldRegister(newKey, 800, 900, false));
+    }
+
+    @Test
+    @DisplayName("先の持ち越しFOUNDが後続の新発見を妨げない")
+    void laterDiscoveryRegistersDespiteEarlierCarriedResult() {
+        PlayerState s = new PlayerState();
+        String oldKey = DedupeKeys.structure("minecraft:village_plains", 100, 200);
+        String newKey = DedupeKeys.structure("minecraft:igloo", 800, 900);
+        runPriming(s, () -> assertFalse(s.shouldRegister(oldKey, 100, 200, true)));
+        assertFalse(s.shouldRegister(oldKey, 100, 200, false));
+        assertTrue(s.shouldRegister(newKey, 800, 900, false));
+    }
 }

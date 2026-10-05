@@ -3,6 +3,13 @@
 All notable changes to Compass to Map: Xaero's edition will be documented in this file.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) — [Semver](https://semver.org/)
 
+## v0.1.3 - Unreleased
+
+### Fixed
+- Fix missed discoveries when an older found compass precedes another compass in the inventory or offhand.
+- Suppress every carried-over result observed at login, including multiple compasses for the same biome.
+- Clarify that waypoint creation needs Xaero's Minimap; World Map can be used alongside it.
+
 ## [0.1.2] - 2026-09-07
 
 ### Fixed

@@ -30,7 +30,7 @@ final class PlayerState {
     private final Set<String> seen = new LinkedHashSet<>();
 
     /**
-     * ログイン時点で既に FOUND だった発見の key → その時の座標。
+     * ログイン時点で既に FOUND だった発見の key → その時の座標集合。
      * **登録しないが {@link #seen} には入れない。**
      *
      * <p>seen に入れてしまうと、そのセッション中ずっとその対象を登録できなくなる。
@@ -56,7 +56,7 @@ final class PlayerState {
      * <b>少しでも動いてから検索し直せば座標は変わる</b>。逆に座標が1ブロックも変わらないなら、
      * 立つはずのピンは既にあるものと同じ位置なので、抑制したままで実害が無い。
      */
-    private final Map<String, Long> staleAtLogin = new HashMap<>();
+    private final Map<String, Set<Long>> staleAtLogin = new HashMap<>();
 
     private int primingTicksLeft = PRIMING_TICKS;
 
@@ -78,13 +78,13 @@ final class PlayerState {
     synchronized boolean shouldRegister(String key, int x, int z, boolean priming) {
         long pos = packPos(x, z);
         if (priming) {
-            staleAtLogin.put(key, pos);
+            staleAtLogin.computeIfAbsent(key, ignored -> new LinkedHashSet<>()).add(pos);
             return false;
         }
-        Long stalePos = staleAtLogin.get(key);
-        if (stalePos != null) {
-            // 同じ座標＝前セッションの結果をそのまま持ち越しているだけ。
-            if (stalePos.longValue() == pos) return false;
+        Set<Long> stalePositions = staleAtLogin.get(key);
+        if (stalePositions != null) {
+            // どれかの持ち越し座標と同じなら、並び替えた古いコンパスも抑制する。
+            if (stalePositions.contains(pos)) return false;
             // 座標が動いた＝検索し直した。以後は普通の発見として扱う。
             staleAtLogin.remove(key);
         }

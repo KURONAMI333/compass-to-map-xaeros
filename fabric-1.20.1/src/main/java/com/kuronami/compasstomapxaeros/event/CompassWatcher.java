@@ -82,16 +82,16 @@ public final class CompassWatcher {
         static void tickCheck(ServerPlayer player, ServerLevel serverLevel,
                               PlayerState state, boolean priming) {
             Inventory inv = player.getInventory();
-            ItemStack found = null;
             for (int i = 0; i < inv.items.size(); i++) {
                 ItemStack stack = inv.items.get(i);
-                if (isFound(stack)) { found = stack; break; }
+                if (isFound(stack)) processFound(stack, player, serverLevel, state, priming);
             }
-            if (found == null) {
-                ItemStack off = inv.offhand.get(0);
-                if (isFound(off)) found = off;
-            }
-            if (found == null) return;
+            ItemStack off = inv.offhand.get(0);
+            if (isFound(off)) processFound(off, player, serverLevel, state, priming);
+        }
+
+        private static void processFound(ItemStack found, ServerPlayer player, ServerLevel serverLevel,
+                                         PlayerState state, boolean priming) {
 
             // EC Fabric 1.20.1: EXPLORERS_COMPASS_ITEM static field, getStructureID method
             ResourceLocation structureKey =
@@ -130,16 +130,16 @@ public final class CompassWatcher {
         static void tickCheck(ServerPlayer player, ServerLevel serverLevel,
                               PlayerState state, boolean priming) {
             Inventory inv = player.getInventory();
-            ItemStack found = null;
             for (int i = 0; i < inv.items.size(); i++) {
                 ItemStack stack = inv.items.get(i);
-                if (isFound(stack)) { found = stack; break; }
+                if (isFound(stack)) processFound(stack, player, serverLevel, state, priming);
             }
-            if (found == null) {
-                ItemStack off = inv.offhand.get(0);
-                if (isFound(off)) found = off;
-            }
-            if (found == null) return;
+            ItemStack off = inv.offhand.get(0);
+            if (isFound(off)) processFound(off, player, serverLevel, state, priming);
+        }
+
+        private static void processFound(ItemStack found, ServerPlayer player, ServerLevel serverLevel,
+                                         PlayerState state, boolean priming) {
 
             // NC Fabric 1.20.1: NATURES_COMPASS_ITEM, getBiomeID
             ResourceLocation biomeKey =

@@ -18,7 +18,7 @@ Find a structure or biome with Explorer's Compass / Nature's Compass and you nor
 **Dependencies**
 
 - At least one of [Explorer's Compass](https://modrinth.com/mod/explorers-compass) or [Nature's Compass](https://modrinth.com/mod/natures-compass) — required for detection
-- [Xaero's Minimap](https://modrinth.com/mod/xaeros-minimap) and/or [Xaero's World Map](https://modrinth.com/mod/xaeros-world-map) (client) — the waypoint target
+- [Xaero's Minimap](https://modrinth.com/mod/xaeros-minimap) (client) — needed to create waypoints. [Xaero's World Map](https://modrinth.com/mod/xaeros-world-map) can be used alongside it, but World Map alone does not provide the waypoint integration
 - Fabric only: [Forge Config API Port](https://modrinth.com/mod/forge-config-api-port)
 
 For the JourneyMap version, see the sister mod Compass to Map.
