@@ -51,4 +51,4 @@ For bugs and questions, comment on the [CurseForge page](https://www.curseforge.
 
 ## Download filenames
 
-From version 0.1.3, release files use `compass-to-map-xaero-<minecraft>-<loader>-<modversion>.jar`, for example `compass-to-map-xaero-1.21.1-neoforge-0.1.3.jar`.
+From version 0.1.3, release files use `compass-to-map-xaero-<modversion>+<loader>-<minecraft>.jar`, for example `compass-to-map-xaero-0.1.3+neoforge-1.21.1.jar`.

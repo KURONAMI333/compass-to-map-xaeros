@@ -155,5 +155,5 @@ tasks.named('jar', Jar).configure {
 
 // 地図名を同列に明示した正式配布JAR名。
 tasks.named('jar').configure {
-    archiveFileName = "compass-to-map-xaero-${minecraft_version}-neoforge-${mod_version}.jar"
+    archiveFileName = "compass-to-map-xaero-${mod_version}+neoforge-${minecraft_version}.jar"
 }

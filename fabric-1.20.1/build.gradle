@@ -76,5 +76,5 @@ jar {
 
 // 地図名を同列に明示した正式配布JAR名。
 tasks.named('remapJar').configure {
-    archiveFileName = "compass-to-map-xaero-${minecraft_version}-fabric-${mod_version}.jar"
+    archiveFileName = "compass-to-map-xaero-${mod_version}+fabric-${minecraft_version}.jar"
 }

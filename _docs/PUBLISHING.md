@@ -13,7 +13,7 @@ Modrinth / CurseForge への公開・更新手順。
 
 - [ ] `mod_version` を全サブプロジェクト（ルート含む）の `gradle.properties` で更新（semver）
 - [ ] 全サブプロジェクト（ルート含む）で `./gradlew clean build --no-build-cache`
-- [ ] 全 `build/libs/compass-to-map-xaero-<minecraft>-<loader>-<modversion>.jar` のサイズ確認（compileOnly が混入してないこと）
+- [ ] 全 `build/libs/compass-to-map-xaero-<modversion>+<loader>-<minecraft>.jar` のサイズ確認（compileOnly が混入してないこと）
 - [ ] 全 jar に `LICENSE_compasstomapxaeros` が同梱されてること (`unzip -l <jar> | grep LICENSE`)
 - [ ] 所有者付きの既存runclientラッパー で各 loader/MC で実機確認
   - [ ] Explorer's Compass で構造物検索 → 発見 → Xaero's に紫の永続 waypoint が**プロンプト無しで即座に立つ**
@@ -50,7 +50,7 @@ Modrinth / CurseForge への公開・更新手順。
 | 既知制限 | NeoForge 1.20.1 は存在しない (NeoForge 自体が 1.21+) |
 | License | All Rights Reserved |
 
-> Description 本文は `_docs/STORE_BODY_EN.md` をそのままコピペ（Modrinth は Markdown 可、CurseForge は WYSIWYG → Markdown モードに切り替えてからペースト）。jar 実ファイル名は `compass-to-map-xaero-<minecraft>-<loader>-<modversion>.jar`（Minecraft・loader・MOD版をファイル名とストアのタグで区別）。
+> Description 本文は `_docs/STORE_BODY_EN.md` をそのままコピペ（Modrinth は Markdown 可、CurseForge は WYSIWYG → Markdown モードに切り替えてからペースト）。jar 実ファイル名は `compass-to-map-xaero-<modversion>+<loader>-<minecraft>.jar`（Minecraft・loader・MOD版をファイル名とストアのタグで区別）。
 
 ---
 

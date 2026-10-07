@@ -5,7 +5,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) — [Semver](ht
 
 ## v0.1.3 - Unreleased
 
-- Use the same release filename format for both map editions: `compass-to-map-<journeymap|xaero>-<minecraft>-<loader>-<modversion>.jar`.
+- Use the same release filename format for both map editions: `compass-to-map-<journeymap|xaero>-<modversion>+<loader>-<minecraft>.jar`.
 ### Fixed
 - Fix missed discoveries when an older found compass precedes another compass in the inventory or offhand.
 - Suppress every carried-over result observed at login, including multiple compasses for the same biome.
