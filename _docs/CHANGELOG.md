@@ -3,7 +3,7 @@
 All notable changes to Compass to Map: Xaero's edition will be documented in this file.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) — [Semver](https://semver.org/)
 
-## v0.1.3 - Unreleased
+## v0.1.3 - 2026-11-10
 
 - Use the same release filename format for both map editions: `compass-to-map-<journeymap|xaero>-<modversion>+<loader>-<minecraft>.jar`.
 ### Fixed
