@@ -1,0 +1,8 @@
+{
+  "message.compasstomapxaeros.structure_found": "Struktur %s ditemukan di %s",
+  "message.compasstomapxaeros.biome_found": "Bioma %s ditemukan di %s",
+  "compasstomapxaeros.configuration.title": "Compass to Map",
+  "compasstomapxaeros.configuration.feature": "Fitur",
+  "compasstomapxaeros.configuration.notification": "Notifikasi",
+  "compasstomapxaeros.configuration.appearance": "Tampilan"
+}
