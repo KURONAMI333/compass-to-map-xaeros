@@ -1,0 +1,8 @@
+{
+  "message.compasstomapxaeros.structure_found": "พบโครงสร้าง %s ที่ %s",
+  "message.compasstomapxaeros.biome_found": "พบไบโอม %s ที่ %s",
+  "compasstomapxaeros.configuration.title": "Compass to Map",
+  "compasstomapxaeros.configuration.feature": "คุณสมบัติ",
+  "compasstomapxaeros.configuration.notification": "การแจ้งเตือน",
+  "compasstomapxaeros.configuration.appearance": "รูปลักษณ์"
+}

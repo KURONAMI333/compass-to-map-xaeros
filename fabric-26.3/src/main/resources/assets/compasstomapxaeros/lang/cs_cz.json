@@ -1,0 +1,8 @@
+{
+  "message.compasstomapxaeros.structure_found": "Objevena struktura %s na %s",
+  "message.compasstomapxaeros.biome_found": "Objeven biom %s na %s",
+  "compasstomapxaeros.configuration.title": "Compass to Map",
+  "compasstomapxaeros.configuration.feature": "Funkce",
+  "compasstomapxaeros.configuration.notification": "Oznámení",
+  "compasstomapxaeros.configuration.appearance": "Vzhled"
+}

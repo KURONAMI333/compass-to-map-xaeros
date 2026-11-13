@@ -1,0 +1,8 @@
+{
+  "message.compasstomapxaeros.structure_found": "Hittade struktur %s vid %s",
+  "message.compasstomapxaeros.biome_found": "Hittade biom %s vid %s",
+  "compasstomapxaeros.configuration.title": "Compass to Map",
+  "compasstomapxaeros.configuration.feature": "Funktioner",
+  "compasstomapxaeros.configuration.notification": "Aviseringar",
+  "compasstomapxaeros.configuration.appearance": "Utseende"
+}

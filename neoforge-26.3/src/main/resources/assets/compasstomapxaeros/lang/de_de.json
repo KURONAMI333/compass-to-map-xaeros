@@ -1,0 +1,8 @@
+{
+  "message.compasstomapxaeros.structure_found": "Struktur %s bei %s entdeckt",
+  "message.compasstomapxaeros.biome_found": "Biom %s bei %s entdeckt",
+  "compasstomapxaeros.configuration.title": "Compass to Map",
+  "compasstomapxaeros.configuration.feature": "Funktionen",
+  "compasstomapxaeros.configuration.notification": "Benachrichtigungen",
+  "compasstomapxaeros.configuration.appearance": "Aussehen"
+}
